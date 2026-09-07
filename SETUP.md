@@ -32,14 +32,38 @@ uvicorn app.main:app --reload --port 8000
 
 Verify: open http://127.0.0.1:8000/ in a browser — should show `{"status":"ok","service":"bottleneck-api"}`. Leave this window running.
 
-Run the engine tests any time you change `queueing.py`, `seed.py`, or anything under `engine/`:
+**Interactive API docs (Swagger)** are built into FastAPI automatically — once the server is running, open http://127.0.0.1:8000/docs to see and try every endpoint from the browser, no separate setup needed. The raw schema is at http://127.0.0.1:8000/openapi.json.
+
+Run the tests any time you change something — there are two suites, testing two different layers:
 
 ```powershell
 cd "D:\Resonance 1.0\bottleneck-app\backend"
 python tests/test_engine.py
+python tests/test_api.py
 ```
 
-All six tests print their own numbers as they go, so you can eyeball whether a change moved things in the direction you expected.
+`test_engine.py` (6 tests) calls the calculation functions directly — run this after changing anything under `engine/`, `seed.py`, or the guardrail. `test_api.py` (12 tests) goes through the actual HTTP routes with a temporary database, so it catches request/response bugs the engine tests can't see — run this after changing `main.py` or `storage.py`. Both print their own numbers as they go, so you can eyeball whether a change moved things the direction you expected.
+
+## Persistence — every run is saved automatically
+
+Every call to `/simulate`, `/strategies`, `/stress-test`, and `/adapt` gets saved to a small database (`backend/bottleneck.db`, created automatically on first run) — nobody has to remember to hit "save." Two new endpoints let you look back:
+
+- `GET /scenarios` — list every saved run (id, label, cycle time, bottleneck, timestamp)
+- `GET /scenarios/{id}` — full detail for one saved run, including the exact config that produced it
+- `DELETE /scenarios/{id}` — remove one
+
+`/ripple` deliberately does **not** auto-save — it fires on every slider drag, and logging every intermediate position while someone drags would flood the history with noise rather than useful runs.
+
+If the database file can't be created (this can happen on certain synced/cloud folders that block SQLite's file locking), the backend automatically falls back to an in-memory store for that session instead of crashing — you'll see a `[storage]` message in the terminal if this happens. Everything still works; it just won't remember past runs after a restart. If you see that message and want real persistence, try running the project from a plain local folder instead of one synced by OneDrive/Dropbox/etc.
+
+## Two demo scenarios — proving the engine isn't domain-specific
+
+`GET /seed/scenarios` lists the ready-made datasets; `GET /seed?scenario=<name>` loads one:
+
+- `software` (default) — the 6-stage software team, Review is the bottleneck. Baseline 5.29 days.
+- `expansion` — a Delhi-based business shipping nationally, where Regional Transport (everything funnels through one hub) is the bottleneck at exactly 96% utilized. Baseline 3.34 days; opening a second hub (hiring into Regional Transport) cuts it to 1.22 days; moving one person from the badly-underused Order Intake stage instead gets you to 1.23 days, for free.
+
+The frontend has two buttons in the header that switch between them live — same UI, same engine, completely different business problem. This is the concrete demo for "we built a general decision simulator, not a hiring calculator": don't just say it, click the other button in front of the judges.
 
 ## Frontend (terminal window 2 — separate window, keep the backend one running)
 

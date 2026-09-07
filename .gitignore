@@ -16,6 +16,9 @@ frontend/out/
 frontend/.env.local
 backend/.env
 
+# Local persistence — generated data, not source
+backend/bottleneck.db
+
 # OS / editor
 .DS_Store
 Thumbs.db

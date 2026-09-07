@@ -22,9 +22,15 @@ async function postJSON<T>(path: string, body: unknown): Promise<T> {
   return res.json();
 }
 
-export async function getSeed(): Promise<CompanyConfig> {
-  const res = await fetch(`${BASE_URL}/seed`);
+export async function getSeed(scenario: string = "software"): Promise<CompanyConfig> {
+  const res = await fetch(`${BASE_URL}/seed?scenario=${encodeURIComponent(scenario)}`);
   if (!res.ok) throw new Error("Failed to load seed config");
+  return res.json();
+}
+
+export async function getAvailableScenarios(): Promise<string[]> {
+  const res = await fetch(`${BASE_URL}/seed/scenarios`);
+  if (!res.ok) throw new Error("Failed to load scenario list");
   return res.json();
 }
 

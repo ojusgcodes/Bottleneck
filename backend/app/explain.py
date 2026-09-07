@@ -23,17 +23,21 @@ def _template_fallback(context: dict) -> str:
 
 
 def explain(context: dict, question: Optional[str] = None) -> dict:
-    api_key = os.getenv("ANTHROPIC_API_KEY") or os.getenv("OPENAI_API_KEY")
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
 
     raw_text = None
     source = "fallback"
-    if api_key:
-        try:
-            raw_text = _call_llm(context, question, api_key)
+    try:
+        if anthropic_key:
+            raw_text = _call_anthropic(context, question, anthropic_key)
             source = "llm"
-        except Exception:
-            raw_text = None
-            source = "fallback"
+        elif openai_key:
+            raw_text = _call_openai(context, question, openai_key)
+            source = "llm"
+    except Exception:
+        raw_text = None
+        source = "fallback"
 
     if raw_text is None:
         raw_text = _template_fallback(context)
@@ -49,11 +53,7 @@ def explain(context: dict, question: Optional[str] = None) -> dict:
     }
 
 
-def _call_llm(context: dict, question: Optional[str], api_key: str) -> str:
-    """Thin wrapper — the guardrail downstream is what makes this safe,
-    not anything clever happening here."""
-    import httpx
-
+def _build_prompt(context: dict, question: Optional[str]) -> str:
     prompt = (
         "You are explaining a workflow simulation result to a non-technical "
         "manager in one or two plain sentences. Only use numbers that appear "
@@ -61,24 +61,52 @@ def _call_llm(context: dict, question: Optional[str], api_key: str) -> str:
     )
     if question:
         prompt += f"Specifically answer: {question}\n"
+    return prompt
 
-    if os.getenv("ANTHROPIC_API_KEY"):
-        resp = httpx.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": api_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            json={
-                "model": "claude-sonnet-4-5",
-                "max_tokens": 200,
-                "messages": [{"role": "user", "content": prompt}],
-            },
-            timeout=8.0,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        return data["content"][0]["text"]
 
-    raise RuntimeError("No supported LLM provider configured")
+def _call_anthropic(context: dict, question: Optional[str], api_key: str) -> str:
+    """Thin wrapper — the guardrail downstream is what makes this safe,
+    not anything clever happening here."""
+    import httpx
+
+    resp = httpx.post(
+        "https://api.anthropic.com/v1/messages",
+        headers={
+            "x-api-key": api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
+        json={
+            # Haiku: fast + cheap, which matters live on stage — the guardrail
+            # strips any invented numbers regardless, so model "smarts" buy
+            # you very little here for a 1-2 sentence explanation.
+            "model": "claude-haiku-4-5-20251001",
+            "max_tokens": 200,
+            "messages": [{"role": "user", "content": _build_prompt(context, question)}],
+        },
+        timeout=8.0,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data["content"][0]["text"]
+
+
+def _call_openai(context: dict, question: Optional[str], api_key: str) -> str:
+    import httpx
+
+    resp = httpx.post(
+        "https://api.openai.com/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "content-type": "application/json",
+        },
+        json={
+            "model": "gpt-4o-mini",
+            "max_tokens": 200,
+            "messages": [{"role": "user", "content": _build_prompt(context, question)}],
+        },
+        timeout=8.0,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data["choices"][0]["message"]["content"]
