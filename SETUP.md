@@ -74,7 +74,16 @@ copy .env.local.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000. It calls the backend at `NEXT_PUBLIC_API_URL` (from `.env.local`, defaults to `http://127.0.0.1:8000`) — the backend window must already be running and showing no errors, or the page will load with a red "could not reach the backend" message instead of data.
+Open http://localhost:3000. It calls the backend at `NEXT_PUBLIC_API_URL` (from `.env.local`, defaults to `http://127.0.0.1:8000`) — the backend window must already be running and showing no errors, or the simulator will load with a red "engine offline" message instead of data.
+
+### What's on which page
+
+- **`/` — the landing page.** Hero, stats, "five moments", the interactive utilisation cliff, the guardrail section, the two-scenario comparison, FAQ. It works **without the backend**: every figure on it is a snapshot of real engine output (`frontend/lib/demo.ts`, verified against `backend/app/engine/queueing.py`). When the backend *is* running, the hero and scenario cards silently swap in live results and the chip changes from "Engine snapshot" to "Live from engine" — so the marketing page can never disagree with the demo.
+- **`/app` — the simulator.** Needs the backend. The pill at the top switches between the two seed scenarios live (`/app?scenario=expansion` deep-links to the logistics one). Headcounts are edited with the − / + under each stage in the Decision Twin; the ripple slider is debounced and cancels in-flight requests, so dragging doesn't flood the API.
+
+### Fonts
+
+The interface uses Inter, Instrument Serif and IBM Plex Mono, loaded from Google Fonts in `app/layout.tsx`. If the demo machine has no internet the page falls back to Segoe UI / Georgia / Consolas and still looks fine — nothing breaks, it's just slightly less pretty. (`frontend/Resonance.html` is the old standalone teaser page; the Next.js landing page replaces it and it isn't served by anything.)
 
 ## If `pip install` fails trying to compile `pydantic-core` (mentions `maturin`, `cargo`, `rustc`)
 

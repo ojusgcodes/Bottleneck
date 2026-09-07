@@ -2,7 +2,361 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------------------------------------------
+   Design tokens — light, warm. Off-white ground, black pills, one hot
+   accent reserved for "the bottleneck" so it reads as the only red
+   thing on the page.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #ecebe8;
+  --bg-2: #f6f5f2;
+  --surface: #ffffff;
+  --ink: #0b0b0b;
+  --ink-2: #454542;
+  --muted: #7b7b76;
+  --line: rgba(10, 10, 10, 0.08);
+  --line-strong: rgba(10, 10, 10, 0.16);
+  --accent: #ff4d1f;
+  --good: #1a8a56;
+  --amber: #c27a00;
+  --dark: #0d0d0d;
+  --dark-2: #191919;
+
+  /* RGB channel triplets — lets Tailwind apply opacity modifiers (bg-good/10) */
+  --bg-rgb: 236 235 232;
+  --bg-2-rgb: 246 245 242;
+  --surface-rgb: 255 255 255;
+  --ink-rgb: 11 11 11;
+  --ink-2-rgb: 69 69 66;
+  --muted-rgb: 123 123 118;
+  --accent-rgb: 255 77 31;
+  --good-rgb: 26 138 86;
+  --amber-rgb: 194 122 0;
+  --dark-rgb: 13 13 13;
+  --dark-2-rgb: 25 25 25;
+
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Instrument Serif", "Iowan Old Style", "Times New Roman", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: #f5f5f5;
-  color: #1a1922;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* ------------------------------------------------------------------
+   Typography
+   ------------------------------------------------------------------ */
+.display {
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+.display-md {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+.display em,
+.display-md em,
+.serif-em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.numeral {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+}
+.lede {
+  color: var(--ink-2);
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------------------------
+   Surfaces
+   ------------------------------------------------------------------ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 1px 0 rgba(10, 10, 10, 0.03), 0 14px 40px -28px rgba(10, 10, 10, 0.25);
+}
+.card-dark {
+  background: var(--dark);
+  color: #fff;
+  border-radius: 28px;
+}
+.card-dark .eyebrow {
+  color: rgba(255, 255, 255, 0.5);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+/* ------------------------------------------------------------------
+   Buttons — pills only.
+   ------------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: transform 0.18s ease, background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease,
+    opacity 0.18s ease;
+  will-change: transform;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 8px 24px -12px rgba(10, 10, 10, 0.6);
+}
+.btn-primary:hover {
+  background: #262626;
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+.btn-ghost:hover {
+  background: rgba(10, 10, 10, 0.05);
+}
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-accent:hover {
+  background: #ff3a06;
+  transform: translateY(-1px);
+}
+.btn-sm {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+.btn-light {
+  background: #fff;
+  color: var(--ink);
+}
+.btn-light:hover {
+  background: #f0efec;
+}
+
+/* Icon step buttons (− / +) */
+.step {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.step:hover {
+  background: var(--bg);
+}
+.step:active {
+  transform: scale(0.94);
+}
+.step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Segmented control */
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.06);
+  border: 1px solid var(--line);
+}
+.seg button {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+.seg button[data-active="true"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.12);
+}
+
+/* ------------------------------------------------------------------
+   Range slider
+   ------------------------------------------------------------------ */
+input[type="range"].range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--ink) 0%,
+    var(--ink) var(--fill, 50%),
+    rgba(10, 10, 10, 0.12) var(--fill, 50%),
+    rgba(10, 10, 10, 0.12) 100%
+  );
+  outline: none;
+}
+input[type="range"].range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  box-shadow: 0 4px 12px -4px rgba(10, 10, 10, 0.5);
+  cursor: grab;
+}
+input[type="range"].range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  box-shadow: 0 4px 12px -4px rgba(10, 10, 10, 0.5);
+  cursor: grab;
+}
+input[type="range"].range:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+/* ------------------------------------------------------------------
+   Motion — reveal on scroll (IntersectionObserver toggles .is-in)
+   ------------------------------------------------------------------ */
+.reveal {
+  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.reveal-armed {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.reveal.reveal-armed.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.reveal-armed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-marquee,
+  .animate-floaty,
+  .animate-pulse2,
+  .bar {
+    animation: none !important;
+  }
+}
+
+/* Utilization bars grow from the bottom on first paint, then tween on change */
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.bar {
+  transform-origin: bottom;
+  animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  transition: height 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.3s ease;
+}
+
+/* Marquee track needs its content duplicated once */
+.marquee {
+  display: flex;
+  width: max-content;
+  gap: 0;
+}
+
+/* Soft dotted grid for hero backdrops */
+.grid-dots {
+  background-image: radial-gradient(rgba(10, 10, 10, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Details/summary accordion polish */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .faq-plus {
+  transform: rotate(45deg);
+}
+.faq-plus {
+  transition: transform 0.25s ease;
+}
+
+/* Thin scrollbars inside horizontally scrolling cards */
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
 }

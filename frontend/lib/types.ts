@@ -1,3 +1,5 @@
+export type ScenarioName = "software" | "expansion";
+
 export interface Stage {
   name: string;
   headcount: number;
