@@ -12,7 +12,16 @@ from .engine.adapt import adapt_plan
 from .explain import explain as explain_fn
 from .seed import default_company, SCENARIOS
 from . import storage
-
+from .decision import (
+    DecisionProblemRequest,
+    DecisionSimulateRequest,
+    DecisionWhatIfRequest,
+    DecisionStressRequest,
+    analyze_problem,
+    simulate_decision,
+    apply_changes,
+    stress_decision,
+)
 app = FastAPI(
     title="Bottleneck API",
     version="0.2.0",
@@ -161,3 +170,24 @@ def api_delete_scenario(scenario_id: int):
     if not deleted:
         raise HTTPException(status_code=404, detail=f"No scenario with id {scenario_id}")
     return {"deleted": scenario_id}
+    @app.post("/decision/analyze")
+def api_decision_analyze(req: DecisionProblemRequest):
+    return analyze_problem(req.problem)
+
+
+@app.post("/decision/simulate")
+def api_decision_simulate(req: DecisionSimulateRequest):
+    return simulate_decision(req.inputs, req.assumptions)
+
+
+@app.post("/decision/what-if")
+def api_decision_what_if(req: DecisionWhatIfRequest):
+    changed = apply_changes(req.inputs, req.changes)
+    result = simulate_decision(changed, req.assumptions)
+    result["what_if_changes"] = req.changes
+    return result
+
+
+@app.post("/decision/stress-test")
+def api_decision_stress(req: DecisionStressRequest):
+    return stress_decision(req.inputs, req.assumptions, req.shocks)
