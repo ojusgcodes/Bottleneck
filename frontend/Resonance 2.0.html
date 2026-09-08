@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOTTLENECK</title>
+
+  <link rel="stylesheet" href="resonance.css">
+  <link rel="stylesheet" href="simulate.css">
+</head>
+
+<body>
+
+  <div class="background">
+    <div class="orb orb-one"></div>
+    <div class="orb orb-two"></div>
+  </div>
+
+
+  <!-- HEADER -->
+  <header>
+
+    <a class="brand" href="#hero">
+      <div class="mini-logo">
+        <img src="bottleneck_bn_logo.png.png" alt="BOTTLENECK Logo">
+      </div>
+
+      <span>BOTTLENECK</span>
+    </a>
+
+    <div class="header-right">
+      <span id="headerNumber">01</span>
+      <span id="headerTitle">INTRODUCTION</span>
+    </div>
+
+  </header>
+
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+
+      <div class="hero-content">
+
+        <div class="hero-logo">
+          <img src="bottleneck_bn_logo.png.png" alt="BOTTLENECK BN Logo">
+        </div>
+
+        <div class="hero-label">
+          SYSTEMS / CHANGE / CONSEQUENCE
+        </div>
+
+        <h1>
+          WELCOME TO
+          <strong>BOTTLENECK</strong>
+        </h1>
+
+        <p class="tagline">
+          Every change has a consequence.
+        </p>
+
+      </div>
+
+      <div class="scroll">
+        <span>SCROLL TO EXPLORE</span>
+        <div class="scroll-line"></div>
+      </div>
+
+    </section>
+
+
+    <!-- SECTION 01 -->
+    <section class="visual-section" data-section="01">
+
+      <div class="section-number">
+        01
+      </div>
+
+      <div class="visual-copy">
+
+        <p class="small-title">
+          CHANGE
+        </p>
+
+        <h2>
+          Nothing
+          <span>stays still.</span>
+        </h2>
+
+        <p>
+          Systems are constantly moving,
+          adapting and responding.
+        </p>
+
+      </div>
+
+
+      <div class="graph-card">
+
+        <div class="graph-top">
+
+          <span>
+            SYSTEM ACTIVITY
+          </span>
+
+          <span class="live-dot">
+            ● LIVE
+          </span>
+
+        </div>
+
+
+        <div class="graph">
+
+          <div class="graph-grid"></div>
+
+          <svg
+            viewBox="0 0 600 220"
+            preserveAspectRatio="none"
+          >
+
+            <path
+              id="graphPath"
+              class="graph-line"
+              d="
+                M0,170
+                C50,160 70,120 110,135
+                S170,180 210,125
+                S270,70 310,105
+                S360,150 400,100
+                S470,60 510,90
+                S560,130 600,45
+              "
+            />
+
+          </svg>
+
+          <div class="graph-point"></div>
+
+          <div class="graph-label label-a">START</div>
+          <div class="graph-label label-b">CHANGE</div>
+          <div class="graph-label label-c">SHIFT</div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SECTION 02 -->
+    <section class="visual-section second" data-section="02">
+
+      <div class="section-number">
+        02
+      </div>
+
+      <div class="visual-copy">
+
+        <p class="small-title">
+          REACTION
+        </p>
+
+        <h2>
+          One shift
+          <span>changes the path.</span>
+        </h2>
+
+        <p>
+          A small movement can create
+          a much larger effect.
+        </p>
+
+      </div>
+
+
+      <div class="abstract-system">
+
+        <div class="system-grid"></div>
+
+        <div class="system-line line-a"></div>
+        <div class="system-line line-b"></div>
+        <div class="system-line line-c"></div>
+
+        <div class="node node-a"></div>
+        <div class="node node-b"></div>
+        <div class="node node-c"></div>
+
+        <div class="pulse"></div>
+
+        <div class="system-label label-one">
+          INPUT
+        </div>
+
+        <div class="system-label label-two">
+          PRESSURE
+        </div>
+
+        <div class="system-label label-three">
+          EFFECT
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SECTION 03 -->
+    <section class="visual-section third" data-section="03">
+
+      <div class="section-number">
+        03
+      </div>
+
+      <div class="visual-copy centered">
+
+        <p class="small-title">
+          CONSEQUENCE
+        </p>
+
+        <h2>
+          Every system
+          <span>has a limit.</span>
+        </h2>
+
+        <p>
+          Somewhere inside every complex
+          system is a point where pressure builds.
+        </p>
+
+      </div>
+
+
+      <div class="minimal-chart">
+
+        <div class="chart-axis"></div>
+
+        <div class="chart-value">
+          SYSTEM PRESSURE
+        </div>
+
+        <div class="rising-line"></div>
+
+        <div class="limit-line">
+          <span>LIMIT</span>
+        </div>
+
+        <div class="impact-point"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ENDING -->
+    <section class="ending">
+
+      <div class="ending-inner">
+
+        <p>
+          THE QUESTION ISN'T WHETHER SOMETHING WILL CHANGE.
+        </p>
+
+        <h2>
+          IT'S WHAT
+          <span>HAPPENS NEXT.</span>
+        </h2>
+
+        <button id="discover" onclick="document.getElementById('console').scrollIntoView({behavior:'smooth'})">
+          DISCOVER BOTTLENECK
+          <span>→</span>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         CONSOLE (formerly simulate.html) — now part of the
+         same page. Same content, just living lower down.
+         =================================================== -->
+    <section class="console-main" id="console">
+
+      <!-- API CONNECT -->
+      <section class="console-section">
+
+        <p class="small-title">STEP 01 / CONNECT</p>
+
+        <h2 class="console-title">
+          Plug in the
+          <span>backend engine.</span>
+        </h2>
+
+        <p class="console-copy">
+          Paste the URL of your backend API endpoint to connect and run simulations. The backend should accept a JSON payload with the scenario data and return a JSON response with the simulation results.
+        </p>
+
+        <div class="api-panel">
+
+          <input
+            type="url"
+            id="apiUrl"
+            class="api-input"
+            placeholder="";
+            autocomplete="off"
+          >
+
+          <button id="testConnection" class="ghost-btn">
+            TEST CONNECTION
+          </button>
+
+        </div>
+
+        <div class="status-row">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText" class="status-text">NOT CONNECTED</span>
+        </div>
+
+      </section>
+
+
+      <!-- SCENARIO BUILDER -->
+      <section class="console-section">
+
+        <p class="small-title">STEP 02 / BUILD SCENARIO</p>
+
+        <h2 class="console-title">
+          Set the
+          <span>resources, constraints & priorities.</span>
+        </h2>
+
+        <div class="builder-grid">
+
+          <div class="builder-col" data-group="resources">
+            <div class="builder-col-head">
+              <h3>RESOURCES</h3>
+              <button class="add-row-btn" data-target="resources">+ ADD</button>
+            </div>
+            <div class="row-list" id="resourcesList"></div>
+          </div>
+
+          <div class="builder-col" data-group="constraints">
+            <div class="builder-col-head">
+              <h3>CONSTRAINTS</h3>
+              <button class="add-row-btn" data-target="constraints">+ ADD</button>
+            </div>
+            <div class="row-list" id="constraintsList"></div>
+          </div>
+
+          <div class="builder-col" data-group="priorities">
+            <div class="builder-col-head">
+              <h3>PRIORITIES</h3>
+              <button class="add-row-btn" data-target="priorities">+ ADD</button>
+            </div>
+            <div class="row-list" id="prioritiesList"></div>
+          </div>
+
+        </div>
+
+        <button id="runSimulation" class="primary-btn">
+          RUN SIMULATION <span>→</span>
+        </button>
+
+      </section>
+
+
+      <!-- RESULTS -->
+      <section class="console-section results-section">
+
+        <p class="small-title">STEP 03 / RESULTS</p>
+
+        <h2 class="console-title">
+          See the
+          <span>outcome & trade-offs.</span>
+        </h2>
+
+        <div id="resultsEmpty" class="results-empty">
+          Run a simulation to see backend output here.
+        </div>
+
+        <div id="resultsMetrics" class="results-metrics"></div>
+
+        <details id="resultsRawWrap" class="results-raw-wrap" hidden>
+          <summary>Raw response</summary>
+          <pre id="resultsRaw" class="results-raw"></pre>
+        </details>
+
+      </section>
+
+    </section>
+
+  </main>
+
+
+  <script src="resonance.js"></script>
+  <script src="simulate.js"></script>
+
+</body>
+</html>
